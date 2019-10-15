@@ -6,20 +6,6 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="display panel"
-      >
-        <div
-          class="led green-led"
-        >
-          Unlocked
-        </div>
-        <div
-          class="led green-led"
-        >
-          Open
-        </div>
-      </div>
-      <div
         class="controls panel"
       >
         <button
@@ -37,20 +23,6 @@ Object {
     </div>
   </body>,
   "container": <div>
-    <div
-      class="display panel"
-    >
-      <div
-        class="led green-led"
-      >
-        Unlocked
-      </div>
-      <div
-        class="led green-led"
-      >
-        Open
-      </div>
-    </div>
     <div
       class="controls panel"
     >
