@@ -1,34 +1,34 @@
 import React from 'react';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { initialState, reducer } from '../reducers'
 import { render, fireEvent, act } from '@testing-library/react'
 
 import Controls from './Controls'
 
+function renderWithRedux(
+    ui,
+    { initialState, store = createStore(reducer, initialState) } = {}
+) {
+    return {
+        ...render(<Provider store={store}>{ui}</Provider>),
+        store,
+    }
+}
+
 test('it renders correctly', () => {
-    expect(render(<Controls />)).toMatchSnapshot()
+    expect(renderWithRedux(<Controls />)).toMatchSnapshot()
 })
 
 test('You can press the lock button if the gate is closed.', () => {
-    const toggleLockedMock = jest.fn()
-    const toggleClosedMock = jest.fn()
-    const locked = false
-    const closed = true
-
-    const { getByText } = render(<Controls locked={locked} closed={closed} toggleLocked={toggleLockedMock} toggleClosed={toggleClosedMock} />)
-    const lockButton = getByText(/lock gate/i)
-    fireEvent.click(lockButton);
-
-    expect(toggleLockedMock).toHaveBeenCalled()
+    const { getByTestId, getByText } = renderWithRedux(<Controls />)
+    fireEvent.click(getByText('Lock Gate'))
 })
 
 test('You cannot press the lock button if the gate is open.', () => {
-    const toggleLockedMock = jest.fn()
-    const toggleClosedMock = jest.fn()
-    const locked = false
-    const closed = false
-
-    const { getByText } = render(<Controls locked={locked} closed={closed} toggleLocked={toggleLockedMock} toggleClosed={toggleClosedMock} />)
-    const lockButton = getByText(/lock gate/i)
-    fireEvent.click(lockButton);
-
-    expect(toggleLockedMock).not.toHaveBeenCalled()
+    const customState = { initialState: { closed: false, locked: false } }
+    const { getByTestId, getByText } = renderWithRedux(<Controls />, customState)
+    const button = getByText('Lock Gate')
+    fireEvent.click(button)
+    button.innerHTML.includes('disabled=""')
 })
