@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Display = ({ closed, locked }) => {
+import { useSelector } from 'react-redux'
+
+export default () => {
+  const { locked, closed } = useSelector(state => state)
+
   const closedClass = `led ${closed ? 'red-led' : 'green-led'}`;
   const lockedClass = `led ${locked ? 'red-led' : 'green-led'}`;
 
@@ -11,10 +15,3 @@ const Display = ({ closed, locked }) => {
     </div>
   );
 };
-
-Display.defaultProps = {
-  closed: false,
-  locked: false,
-};
-
-export default Display;
